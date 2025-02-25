@@ -1,9 +1,8 @@
-class Cuenta:
-    """
-    Representa una cuenta bancaria con funcionalidades básicas como
-    consultar saldo, retirar, depositar y transferir dinero.
-    """
-    def __init__(self, usuario, pin, saldo=0):
+class Cuenta: #class sirve para organizar mejor el código y hacer que cada cuenta bancaria funcione como un objeto independiente, con sus propios datos y funciones.
+    
+    #Representa una cuenta bancaria con funcionalidades básicas como consultar saldo, retirar, depositar y transferir dinero.
+
+    def __init__(self, usuario, pin, saldo=0):#__init__No recibe parámetros adicionales, solo self (referencia a la instancia).
         self.usuario = usuario
         self.pin = str(pin)  # Asegurar que el PIN se almacene como string
         self.saldo = saldo
@@ -11,21 +10,21 @@ class Cuenta:
         self.bloqueada = False  # Indica si la cuenta está bloqueada
 
     def consultar_saldo(self):
-        """Devuelve el saldo actual de la cuenta."""
+        #Devuelve el saldo actual de la cuenta.
         return self.saldo
 
     def retirar_dinero(self, cantidad):
-        """Permite retirar dinero de la cuenta si hay saldo suficiente."""
+        #Permite retirar dinero de la cuenta si hay saldo suficiente.
         if cantidad > self.saldo:
-            print("Fondos insuficientes.")
+            print("Fondos insuficientes.") # Mensaje si no hay saldo suficiente
         elif cantidad <= 0:
-            print("Ingrese una cantidad válida.")
+            print("Ingrese una cantidad válida.")    # Evita retirar valores inválidos
         else:
-            self.saldo -= cantidad
+            self.saldo -= cantidad # Resta la cantidad del saldo
             print(f"Has retirado {cantidad}. Nuevo saldo: {self.saldo}")
 
     def depositar_dinero(self, cantidad):
-        """Permite depositar dinero en la cuenta."""
+        #Permite depositar dinero en la cuenta.
         if cantidad <= 0:
             print("Ingrese una cantidad válida.")
         else:
@@ -33,7 +32,7 @@ class Cuenta:
             print(f"Has depositado {cantidad}. Nuevo saldo: {self.saldo}")
 
     def transferir_dinero(self, cantidad, cuenta_destino):
-        """Permite transferir dinero a otra cuenta si hay saldo suficiente."""
+        #Permite transferir dinero a otra cuenta si hay saldo suficiente.
         if self.usuario == cuenta_destino.usuario:
             print("No puedes transferirte dinero a ti mismo.")
         elif cantidad > self.saldo:
@@ -46,7 +45,7 @@ class Cuenta:
             print(f"Has transferido {cantidad} a {cuenta_destino.usuario}. Nuevo saldo: {self.saldo}")
 
     def verificar_pin(self, pin_ingresado):
-        """Verifica si el PIN ingresado es correcto y maneja intentos fallidos."""
+        #Verifica si el PIN ingresado es correcto y maneja intentos fallidos.
         if self.bloqueada:
             print("La cuenta está bloqueada.")
             return False
@@ -63,12 +62,12 @@ class Cuenta:
 
 
 class Cajero:
-    """Simula un cajero automático con múltiples cuentas."""
+    #Simula un cajero automático con múltiples cuentas.
     def __init__(self):
         self.cuentas = {}  # Diccionario para almacenar cuentas
 
     def crear_cuenta(self, usuario, pin):
-        """Crea una nueva cuenta si el usuario no existe."""
+        #Crea una nueva cuenta si el usuario no existe.
         if usuario not in self.cuentas:
             self.cuentas[usuario] = Cuenta(usuario, pin)
             print(f"Cuenta creada para {usuario}.")
@@ -76,7 +75,7 @@ class Cajero:
             print(f"Ya existe una cuenta para el usuario {usuario}.")
 
     def iniciar_sesion(self, usuario):
-        """Permite al usuario iniciar sesión ingresando el PIN correctamente."""
+        #Permite al usuario iniciar sesión ingresando el PIN correctamente.
         cuenta = self.cuentas.get(usuario)
         if not cuenta:
             print("Usuario no encontrado.")
@@ -94,7 +93,7 @@ class Cajero:
 
 
 def menu():
-    """Muestra el menú de opciones del cajero automático."""
+    #Muestra el menú de opciones del cajero automático.
     print("\n*** Menú del Cajero Automático ***")
     print("1. Consultar saldo")
     print("2. Retirar dinero")
@@ -104,12 +103,13 @@ def menu():
 
 
 def ejecutar_cajero():
-    """Ejecuta el flujo principal del cajero automático."""
+    #Ejecuta el flujo principal del cajero automático.
     cajero = Cajero()
     
     # Crear cuentas de prueba
     cajero.crear_cuenta("usuario1", "1234")
     cajero.crear_cuenta("usuario2", "5678")
+    cajero.crear_cuenta("usuario3", "7974")
 
     usuario = input("Ingrese su nombre de usuario: ")
     cuenta = cajero.iniciar_sesion(usuario)
@@ -138,9 +138,9 @@ def ejecutar_cajero():
                 cuenta_destino = cajero.cuentas.get(destino)
                 if cuenta_destino:
                     try:
-                        cantidad = float(input("¿Cuánto dinero desea transferir? "))
+                        cantidad = float(input("¿Cuánto dinero desea transferir? ")) #input() devuelve una cadena de texto (string).float() convierte esa cadena en un número decimal.Esto permite manejar cantidades con decimales (ej. 50.75 en lugar de solo 50).
                         cuenta.transferir_dinero(cantidad, cuenta_destino)
-                    except ValueError:
+                    except ValueError: #ValueError es un tipo de error en Python que ocurre cuando se pasa un valor incorrecto a una función o método que espera un tipo de dato específico.
                         print("Error: Ingrese un número válido.")
                 else:
                     print("Usuario destino no encontrado.")
